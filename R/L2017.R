@@ -10,7 +10,7 @@ require(R6);
 # - each item associated with a relative frequency
 # - no associative language interaction (as monolingual)
 # - no monitoring
-#
+# - some more content
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
 #' Class defining a meaning-form frequency distribution.
