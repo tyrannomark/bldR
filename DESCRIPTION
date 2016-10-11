@@ -4,8 +4,6 @@ Title: Bilingual-Led Diversity Library
 Version: 0.1.0
 Author: T. Mark Ellison <tmarkellison@gmail.com>
 Maintainer: T. Mark Ellison <tmarkellison@gmail.com>
-Description: This library contains functions for simulating and testing models of Bilingual-Led Divergence, such as described in the paper:
-Ellison, TM & L Miceli (forthcoming) Language Monitoring in Bilinguals as a Mechanism for Rapid Lexical Divergence. Language.
-The (R6) classes include TensorModel implementing the cognitive models in the paper, PopulationSimulation proving agent-based simulations where each agent implements the cognitive model, and L2017 which constructs the graphs and statistics presented in the paper.
+Description: This library contains functions for simulating and testing models of Bilingual-Led Divergence, such as described in the paper: Ellison, TM & L Miceli (forthcoming) Language Monitoring in Bilinguals as a Mechanism for Rapid Lexical Divergence. Language. The (R6) classes include TensorModel implementing the cognitive models in the paper, PopulationSimulation proving agent-based simulations where each agent implements the cognitive model, and L2017 which constructs the graphs and statistics presented in the paper.
 License: GNU Public License Version 3 - GPLv3
 LazyData: FALSE
