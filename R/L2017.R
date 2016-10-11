@@ -44,7 +44,7 @@ require(R6);
 #' print( L1$selectByDistribution("BAG") );
 L2017Graphme <- R6Class("L2017Graphme",
                               public = list(
-                                graphDir = "../FinalVersion/Graphs/",
+                                graphDir = "./",
                                 graphNumber = "",
                                 resolution = 300,
                                 pt_per_px = 1.0,
@@ -542,6 +542,13 @@ L2017$set("public","t_test", function() {
   rm <- r[r$Condition == "Monolingual",];
   rb <- r[r$Condition == "Bilingual",];
   t.test(rm$IsDoppel,rb$IsDoppel,paired=TRUE)
+});
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+# L2017$get_1ab
+#
+L2017$set("public","setGraphDir", function(dir) {
+  self$G$graphDir <- dir;
 });
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
