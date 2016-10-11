@@ -5,11 +5,8 @@ require(tensorA);
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-# GrosjeanGraphs - Graphs of Grosjean Model
-# - each item associated with a relative frequency
-# - no associative language interaction (as monolingual)
-# - no monitoring
-#
+# TensorModel - an implementation of Ellison & Miceli (2017)
+#   model of multi-/bi-lingual lexical selection
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
 #' Class defining a meaning-form frequency distribution.
@@ -17,34 +14,46 @@ require(tensorA);
 #' @docType class
 #' @importFrom R6 R6Class
 #' @export
-#' @return An object of class GrosjeanGraph.
-#' @return Object of \code{\link{Lexicon}} with methods for adding lexical items and selecting forms according to the experienced distribution.
+#' @return An object of class TensorModel.
+#' @return Object of class \code{\link{TensorModel}}.
 #' @format \code{\link{R6Class}} object.
-#' @field meanings Stores a list of distinct meanings.
-#' @field forms Stores a list of distinct forms.
-#' @field meanings2 Stores a list of meanings with repeats if more than one matching form.
-#' @field forms2 Stores a list of forms with repeats if more than one matching meaning.
-#' @field frequencies Stores the total frequency supplied for this meaning-form pair.
+#' @field \code{$LanguageMode}
+#' @field \code{$MonitoringLevel}
+#' @field \code{$Meanings}
+#' @field \code{$Languages}
+#' @field \code{$NumberOfLanguages}
+#' @field \code{$meLanguages}
+#' @field \code{$meLanguagePairs}
+#' @field \code{$LexicalTensor}
+#' @field \code{$version}
+#' @field \code{$delta_lt}
+#' @field \code{$p_l_t__b}
+#' @field \code{$p_f_sl}
+#' @field \code{$p_f_st__b}
+#' @field \code{$p_l_fst__bm}
+#' @field \code{$p_f_st__bm}
+#' @field \code{$p_l_t__b_version}
+#' @field \code{$p_f_sl_version}
+#' @field \code{$p_f_st__b_version}
+#' @field \code{$p_l_fst__bm_version}
+#' @field \code{$p_f_st__bm_version}
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{Presents the meanings and uses of \code{Lexicon}'s methods.}
-#'   \item{\code{new()}}{Creates a new, empty lexicon object.}
-#'   \item{\code{setLanguageMode(languageMode)}}{Set the level of interaction between target and other languages.}
-#'   \item{\code{setMonitoringLevel(monitoringLevel)}}{Set the level of monitoring exerted by the agent.}
-#'   \item{\code{addExample(meaning,language,form)}}{Adds new triple to the lexicon.}
-#'   \item{\code{normalise(t,overIndices)}}{Normalise a tensor \code{t} over some vector of indices \code{overIndices}.}
-#'   \item{\code{makeG()}}{Construct the Grosjean language activation distribution from the \code{languageMode} and \code{numberOfLanguages}.
+#'   \item{Documentation}{Here are \code{TensorModel}'s methods.}
+#'   \item{\code{$new()}}{Creates a new, empty \code{TensorModel} object.}
+#'   \item{\code{$clearLexicon()}}{Empties the lexical memory, removing all meaning-language-form triples.}
+#'   \item{\code{$setLanguageMode(languageMode)}}{Set the level of interaction between target and other languages.}
+#'   \item{\code{$setMonitoringLevel(monitoringLevel)}}{Set the level of monitoring exerted by the agent.}
+#'   \item{\code{$addExample(meaning,language,form,ct=1)}}{Adds meaning-language-form triple to the model if it does not exist already. It then adds \code{ct} to the frequency recorded for this triple.}
+#'   \item{\code{$normalise(t,overIndices)}}{Normalise a tensor \code{t} over some vector of indices \code{overIndices}.}
+#'   \item{\code{$constructDataTensor()}}{Uses the tuples entered using \code{$addExample(..)} to build a tensor representing the distribution over experienced meaning-language-form combinations.}
+#'   \item{\code{make_p_()}}{Construct the Grosjean language activation distribution from the \code{languageMode} and \code{numberOfLanguages}.
 #'         NB: In future, this could extend to variation of language choice with semantics as well.}
-#'   \item{\code{makeLfromG(R,G)}}{Given input relative frequencies \code{R} and Grosjean language activation distribution \code{G}, construct a tensor expressing the action of the language monitor.}
-#'   \item{\code{makeL(R,languageMode,numberOfLanguages)}}{.}
-#'   \item{\code{}}{.}
+#'   \item{\code{$makeLfromG(R,G)}}{Given input relative frequencies \code{R} and Grosjean language activation distribution \code{G}, construct a tensor expressing the action of the language monitor.}
+#'   \item{\code{$makeL(R,languageMode,numberOfLanguages)}}{.}
 #'   \item{\code{apply(t,f)}}{Apply function \code{f} to each element of the tensor \code{t}.}
 #'   \item{\code{debugMe(name,t)}}{Print out a reasonable view of tensor \code{t} calling it \code{name}.}
 #'   \item{\code{makePosterior(R,languageMode)}}{.}
-#'   \item{\code{}}{.}
-#'   \item{\code{}}{.}
-#'   \item{\code{}}{.}
-#'   \item{\code{}}{.}
 #' }
 #' @examples
 #' L1 <- Lexicon$new();
