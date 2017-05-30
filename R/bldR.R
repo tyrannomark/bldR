@@ -11,7 +11,7 @@
 #'
 #' @docType package
 #' @name bldR
-#' @seealso Most uptodate version at http://bld.markellison.net/
+#' @seealso Most uptodate version at https://github.com/tyrannomark/bldR
 NULL
 
 #' EM2017_Stimuli
@@ -33,7 +33,7 @@ NULL
 #' \item{EnglishContext}{This is the paragraph immediately preceding the sentence frame used with monolingual English speakers.}
 #' \item{EnglishFrame}{This is the sentence frame (with a non-initial gap) used to elicit a response from the participants.}
 #' }
-#' @references \url{http://bld.markellison.net/}
+#' @references \url{https://github.com/tyrannomark/bldR}
 #' @keywords data, experiment
 NULL
 
@@ -53,7 +53,7 @@ NULL
 #' \item{Response}{The response given by this participant to this stimulus.}
 #' \item{IsDoppel}{A numeric value with 1 if the response is a doppel, and 0 if not.}
 #' }
-#' @references \url{http://bld.markellison.net/}
+#' @references \url{https://github.com/tyrannomark/bldR}
 #' @keywords data, experiment
 NULL
 
@@ -76,6 +76,6 @@ NULL
 #'   \item{ml}{Monitoring level varying from 0.00 to 1.00 in increments of 0.01.}
 #' \item{p}{The conditional probability of the form given the parameter values - basically, how well did the model do at predicting the frequency with which this form would be used by bilinguals.}
 #' }
-#' @references \url{http://bld.markellison.net/}
+#' @references \url{https://github.com/tyrannomark/bldR}
 #' @keywords data, experiment
 NULL

@@ -19,7 +19,7 @@ This data set contains the fit of the cognitive model described in Ellison & Mic
 to the data returned by the experiment also described in the paper.
 }
 \references{
-\url{http://bld.markellison.net/}
+\url{https://github.com/tyrannomark/bldR}
 }
 \author{
 T. Mark Ellison \email{m.ellison@anu.edu.au}

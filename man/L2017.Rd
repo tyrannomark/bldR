@@ -26,7 +26,6 @@ between the monolingual and bilingual results from the experiment.
 \section{Methods}{
 
 \describe{
-  \item{Documentation}{Presents the meanings and uses of \code{L2017}'s methods.}
   \item{\code{$new()}}{Creates a new, empty lexicon object.}
   \item{\code{$draw_1ab(graph_number,language,side)}}{Draws graphs 1a and 1b, depending on arguments (see example).}
   \item{\code{$t_test()}}{Performs the Student t test comparing doppel rates between monolinguals and bilinguals in the experimental results.}

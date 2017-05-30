@@ -1,9 +1,4 @@
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-# TODOS:
-#
-require(R6);
-#
-#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 # L2017 - Graphs for Language Article
@@ -21,6 +16,7 @@ require(R6);
 # - some more content
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
+require(R6)
 L2017Graphme <- R6Class("L2017Graphme",
                         public = list(
                           resolution = 300,
@@ -488,7 +484,6 @@ L2017Datame$set("public","get_9", function(nT=25,lm=0.54,ml=1.0,A_d=100/101,A_n=
 #' @format \code{\link{R6Class}} object.
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{Presents the meanings and uses of \code{L2017}'s methods.}
 #'   \item{\code{$new()}}{Creates a new, empty lexicon object.}
 #'   \item{\code{$draw_1ab(graph_number,language,side)}}{Draws graphs 1a and 1b, depending on arguments (see example).}
 #'   \item{\code{$t_test()}}{Performs the Student t test comparing doppel rates between monolinguals and bilinguals in the experimental results.}

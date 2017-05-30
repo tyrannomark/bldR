@@ -2,8 +2,8 @@ Package: bldR
 Type: Package
 Title: Bilingual-Led Diversity Library
 Version: 0.1.0
-Author: T. Mark Ellison <tmarkellison@gmail.com>
-Maintainer: T. Mark Ellison <tmarkellison@gmail.com>
+Author: T. Mark Ellison <bldR@markellison.net>
+Maintainer: T. Mark Ellison <bldR@markellison.net>
 Description: This library contains functions for simulating and testing models
     of Bilingual-Led Divergence, such as described in the paper: Ellison, TM & L
     Miceli (2017 - 93(2):255-287) Language Monitoring in Bilinguals as a Mechanism for Rapid

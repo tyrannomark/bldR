@@ -16,7 +16,7 @@
 This data set contains the responses returned in the experiment described in Ellison & Miceli (2017 - Language 93(2):255-287).
 }
 \references{
-\url{http://bld.markellison.net/}
+\url{https://github.com/tyrannomark/bldR}
 }
 \author{
 T. Mark Ellison \email{m.ellison@anu.edu.au}

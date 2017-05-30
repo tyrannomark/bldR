@@ -17,5 +17,5 @@ bldR provides three R6 classes:
 Each are described on their own pages.
 }
 \seealso{
-Most uptodate version at http://bld.markellison.net/
+Most uptodate version at https://github.com/tyrannomark/bldR
 }

@@ -118,6 +118,6 @@ Later versions will include:
 
 ## Contributors
 
-The code and documentation presented here were all written by [T. Mark Ellison](http://markellison.net/). Conceptual development as reported in the paper *EM* was jointly undertaken with Luisa Miceli.
+The code and documentation presented here were written by [T. Mark Ellison](http://markellison.net/). Conceptual development as reported in the paper *EM*, and the design and collection of experimental data, were jointly undertaken with Luisa Miceli.
 
 GNU Public License version 3
