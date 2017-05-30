@@ -8,12 +8,23 @@ require(R6);
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 # PopulationSimulation - Multi-Agent Population Simulations
 # - each item associated with a relative frequency
-# - no associative language interaction (as monolingual)
-# - no monitoring
+#
+# Most uptodate versions available from http://bld.markellison.net/
 #
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
-#' Class defining a meaning-form frequency distribution.
+#' PopulationSimulation
+#'
+#' This R6 class defines functions for running agent-based simulations described in Ellison & Miceli (2017 - Language 93(2):255-287) - hereafter EM.
+#' These simulations use the cognitive model
+#' defined by the class TensorAgent in this package. The modelling works by setting the parameters using
+#' auxiliary methods, then calling a \code{$simulate()} method to execute the simulation.
+#' The simulation models a two-language community, with 2 monolingual populations and a bilingual community.
+#' The sizes of each of these communities can be set by parameter. The language mode and monitoring level are
+#' set globally in the simulation, applying to all individuals in the bilingual community (they have no effect
+#' on the monolingual communities).
+#'
+#' Graphs 10a,b,c in EM are based on simulations run using this class.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
@@ -21,48 +32,67 @@ require(R6);
 #' @return An object of class PopulationSimulation.
 #' @return Object of \code{\link{PopulationSimulation}} with methods for drawing graphs according suitable for final version of the paper.
 #' @format \code{\link{R6Class}} object.
-#' @field meanings Stores a list of distinct meanings.
-#' @field forms Stores a list of distinct forms.
-#' @field meanings2 Stores a list of meanings with repeats if more than one matching form.
-#' @field forms2 Stores a list of forms with repeats if more than one matching meaning.
-#' @field frequencies Stores the total frequency supplied for this meaning-form pair.
+#' @section Fields
+#' \describe{
+#'   \item{\code{LanguageMode}}{The parameter defining how likely agents are to generate potential (even if unrealised) intrusions from non-target langauges.
+#'   Parameter takes values $[0,1]$, 0 if no chance of intrusions, 1 if 50\% chance of intrusion.}
+#'   \item{\code{MonitoringLevel}}{The parameter defining how intensely agents monitor to avoid non-target language intrusions. Parameter takes values $[0,1]$, 0 if no monitoring takes place, 1 if all potential intrusions are blocked.}
+#'   \item{\code{Population_A}}{The number of agents in population speaking only language A.}
+#'   \item{\code{Population_B}}{The number of agents in population speaking only language B.}
+#'   \item{\code{Population_AB}}{The number of agents in population speaking both languages: A and B.}
+#'   \item{\code{Population}}{The total number of agents.}
+#'   \item{\code{SamplesPerAgent}}{The amount of data collected from each agent to serve as inputs to other agents' lexical memory.}
+#'   \item{\code{NumberOfGenerations}}{The number of generations. In this simulation process, one generation involves two steps: talking on inputs, and generating data according to the cognitive model which will be input for the next generation.}
+#' }
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{Presents the meanings and uses of \code{PopulationSimulation}'s methods.}
-#'   \item{\code{new()}}{Creates a new, empty lexicon object.}
-#'   \item{\code{addItemInstance(meaning,form,ct=1)}}{Adds a new \code{meaning}-\code{form} pair to the lexicon (if none already exists). It increments the count for that pair by \code{ct}.}
-#'   \item{\code{makeFormDistribution(meaning)}}{Returns the probability distribution over forms matching the argument \code{meaning}.}
-#'   \item{\code{selectForm(meaning)}}{Selects a single form according to the probability distribution matching the argument \code{meaning}.}
+#'   \item{\code{new()}}{Creates a new, empty \code{PopulationSimulation} object.}
+#'   \item{\code{$setPopulationStructure(A=100,B=100,AB=0)}}{Sets the population levels for the 2 monolingual communities and the bilingual community.}
+#'   \item{\code{$setLanguageMode(languageMode)}}{Sets the language mode field.}
+#'   \item{\code{$setMonitoringLevel(monitoringLevel)}}{Sets the monitoring level field.}
+#'   \item{\code{$setSamplesPerAgent(samplesPerAgent)}}{Sets the samples-per-agent field.}
+#'   \item{\code{$setNumberOfGenerations(numberOfGenerations)}}{Sets the number of generations for the simulation.}
+#'   \item{\code{$clearLexicon()}}{Empty the lexicons of all agents.}
+#'   \item{\code{$constructDataTensor()}}{Initialises the tensor structures of each agent.}
+#'   \item{\code{$make_p_f_st__bm()}}{Builds the probabilistic mapping from meanings and target languages to forms in each agent. This is a complete run of the TensorAgent simulation for each agent, based on the input distribution of language-meaning-form combinations.}
+#'   \item{\code{$setLexicon(A_d=0.5,A_nA=0.5,A_nB=0.0,B_d=0.5,B_nA=0.0,B_nB=0.5)}}{Set the initial frequency associated with each form in each language. \code{A_d} is the doppel as it is in language A, \code{A_nA} is the non-doppel native to language A as it appears in A, \code{A_nB} is the non-doppel native to language B should it appear in A, \code{B_d} is the doppel in language B, \code{B_nA} is the non-doppel native to A if it appears in language B, \code{B_nB} is the non-doppel native to B as it appears in that language. Values for each of these can be any positive floating-point number.}
+#'   \item{\code{$productionDistribution()}}{Aggregates the distribution over forms in each language.}
+#'   \item{\code{$sampleFromDistribution(distribution,exact=FALSE)}}{Takes a sample from the given distribution. If \code{exact} is \code{TRUE} then the distribution extracted is exact distributional copy as opposed to a random sample.}
+#'   \item{\code{$setDistribution(samples)}}{Sets the distribution over lexical items in each agent (call \code{$clearLexicon()} first).}
+#'   \item{\code{$simulate(exact=FALSE)}}{Simulate for the specified number of generations, with the given parameter values, from a starting distribution of \code{A_d=0.55,A_nA=0.45,A_nB=0.0,B_d=0.5,B_nA=0.0,B_nB=0.5}.}
 #' }
 #' @examples
-#' L1 <- Lexicon$new();
-#' L1$addItemInstance("BAG","sac",5);
-#' L1$addItemInstance("FISH","peche",3);
-#' L1$addItemInstance("BAG","valise",11);
-#' print( L1aA$frequencies );
-#' print( L1$makeFormDistribution("BAG") );
-#' print( L1$selectByDistribution("BAG") );
+#' library(bldR)
+#' ps <- PopulationSimulation$new();
+#' ps$setPopulationStructure(20,20,20);
+#' ps$setNumberOfGenerations(10);
+#' ps$setMonitoringLevel(1.0);
+#' ps$setLanguageMode(0.54);
+#' ps$setSamplesPerAgent(100);
+#' ps$setLexicon();
+#' ps$simulate(exact=FALSE);
+#'
 PopulationSimulation <- R6Class("PopulationSimulation",
-                        public = list(
-                          LanguageMode = 0.0,
-                          MonitoringLevel = 0.0,
-                          Population_A = 100,
-                          Population_B = 100,
-                          Population_AB = 100,
-                          Population = 300,
-                          SamplesPerAgent = 100,
-                          NumberOfGenerations = 10,
-                          Agents = NULL,
-                          Agents_A = NULL,
-                          Agents_B = NULL,
-                          Trace = NULL,
-                          initialize = function() {
-                            require(tensorA);
-                            self$Agents = c();
-                            self$Agents_A = c();
-                            self$Agents_B = c();
-                          }
-                        )
+                                public = list(
+                                  Agents = NULL,
+                                  Agents_A = NULL,
+                                  Agents_B = NULL,
+                                  Trace = NULL,
+                                  LanguageMode = 0.0,
+                                  MonitoringLevel = 0.0,
+                                  Population_A = 100,
+                                  Population_B = 100,
+                                  Population_AB = 100,
+                                  Population = 300,
+                                  SamplesPerAgent = 100,
+                                  NumberOfGenerations = 10,
+                                  initialize = function() {
+                                    require(tensorA);
+                                    self$Agents = c();
+                                    self$Agents_A = c();
+                                    self$Agents_B = c();
+                                  }
+                                )
 );
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -260,10 +290,10 @@ PopulationSimulation$set("public","productionDistribution", function() {
     # print(dim(tr)); print(names(agent$Languages));
     for (language in names(agent$Languages)) {
       t <- agent$Languages[[language]]; # print(t);
-      m[language,"d"]  <- m[language,"d"]  + tr[f=1,s=1,t=t] / agent$NumberOfLanguages;
+      m[language,"d" ] <- m[language,"d"]  + tr[f=1,s=1,t=t] / agent$NumberOfLanguages;
       m[language,"nA"] <- m[language,"nA"] + tr[f=2,s=1,t=t] / agent$NumberOfLanguages;
       m[language,"nB"] <- m[language,"nB"] + tr[f=3,s=1,t=t] / agent$NumberOfLanguages;
-      m[language,"ct"] <- m[language,"ct"] + 1.0 / agent$NumberOfLanguages;
+      m[language,"ct"] <- m[language,"ct"] + 1.0             / agent$NumberOfLanguages;
     }
   }
   for (language in rownames(m)) {

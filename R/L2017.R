@@ -2,6 +2,56 @@
 # TODOS:
 #
 require(R6);
+#
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+# L2017 - Graphs for Language Article
+#
+# Most uptodate versions available from http://bld.markellison.net/
+
+#' EM2017_Stimuli
+#'
+#' This data set contains the stimuli used in the experiment described in
+#' Ellison & Miceli (2017 - Language 93(2):255-287).
+#'
+#'
+#' @name EM2017_Stimuli
+#' @docType data
+#' @author T. Mark Ellison \email{m.ellison@anu.edu.au}
+#' @format A data frame with 41 rows and 7 columns. The columns are as follows:
+#' \describe{
+#' \item{StimulusId}{An identifying number associated with this particular stimulus.}
+#' \item{DutchDoppel}{The Dutch half of the doppel which is a potential response to the stimulus.}
+#' \item{EnglishDoppel}{The English half of the doppel which is a potential response to the stimulus. This is a potential response to the stimulus.}
+#' \item{EnglishNonDoppelExample}{An example word which could also be a response to the stimulus, but which has no doppel in Dutch.}
+#' \item{DutchContext}{This is the paragraph immediately preceding the sentence frame, tightening the semantic context and (when used with EnglishFrame) pushing the participants into bilingual mode.}
+#' \item{EnglishContext}{This is the paragraph immediately preceding the sentence frame used with monolingual English speakers.}
+#' \item{EnglishFrame}{This is the sentence frame (with a non-initial gap) used to elicit a response from the participants.}
+#' }
+#' @references \url{http://bld.markellison.net/}
+#' @keywords data, experiment
+NULL
+
+#' EM2017_Responses
+#'
+#' This data set contains the responses returned in the experiment described in Ellison & Miceli (2017 - Language 93(2):255-287).
+#'
+#'
+#' @name EM2017_Responses
+#' @docType data
+#' @author T. Mark Ellison \email{m.ellison@anu.edu.au}
+#' @format A data frame with 2049 rows and 5 columns. The columns are as follows:
+#' \describe{
+#' \item{Condition}{Either "Monolingual" or "Bilingual" indicating the linguistic background of the participant.}
+#' \item{ParticipantId}{The identifying code for the participant.}
+#' \item{StimulusId}{The identifying code for the stimulus.}
+#' \item{Response}{The response given by this participant to this stimulus.}
+#' \item{IsDoppel}{A numeric value with 1 if the response is a doppel, and 0 if not.}
+#' }
+#' @references \url{http://bld.markellison.net/}
+#' @keywords data, experiment
+NULL
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -13,64 +63,41 @@ require(R6);
 # - some more content
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
-#' Class defining a meaning-form frequency distribution.
-#'
-#' @docType class
-#' @importFrom R6 R6Class
-#' @export
-#' @return An object of class L2017Graphme.
-#' @return Object of \code{\link{L2017Graphme}} with methods for drawing graphs according suitable for final version of the paper.
-#' @format \code{\link{R6Class}} object.
-#' @field meanings Stores a list of distinct meanings.
-#' @field forms Stores a list of distinct forms.
-#' @field meanings2 Stores a list of meanings with repeats if more than one matching form.
-#' @field forms2 Stores a list of forms with repeats if more than one matching meaning.
-#' @field frequencies Stores the total frequency supplied for this meaning-form pair.
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{Presents the meanings and uses of \code{Lexicon}'s methods.}
-#'   \item{\code{new()}}{Creates a new, empty lexicon object.}
-#'   \item{\code{addItemInstance(meaning,form,ct=1)}}{Adds a new \code{meaning}-\code{form} pair to the lexicon (if none already exists). It increments the count for that pair by \code{ct}.}
-#'   \item{\code{makeFormDistribution(meaning)}}{Returns the probability distribution over forms matching the argument \code{meaning}.}
-#'   \item{\code{selectForm(meaning)}}{Selects a single form according to the probability distribution matching the argument \code{meaning}.}
-#' }
-#' @examples
-#' L1 <- Lexicon$new();
-#' L1$addItemInstance("BAG","sac",5);
-#' L1$addItemInstance("FISH","peche",3);
-#' L1$addItemInstance("BAG","valise",11);
-#' print( L1aA$frequencies );
-#' print( L1$makeFormDistribution("BAG") );
-#' print( L1$selectByDistribution("BAG") );
 L2017Graphme <- R6Class("L2017Graphme",
-                              public = list(
-                                graphDir = "./",
-                                graphNumber = "",
-                                resolution = 300,
-                                pt_per_px = 1.0,
-                                widthMm = 150,
-                                heightMm = 150,
-                                width = 640, height = 640,
-                                isColour = FALSE,
-                                initialize = function() {
-                                  require(ggplot2); require(cowplot); require(grid);
-                                  self$pt_per_px <- self$resolution / 72;
-                                  self$pt_per_px <- 1.0;
-                                  self$width <- round( self$widthMm * self$resolution * 0.0393701 );
-                                  self$height <- round( self$heightMm * self$resolution * 0.0393701 );
-                                }
-                              )
+                        public = list(
+                          resolution = 300,
+                          widthMm = 150,
+                          heightMm = 150,
+                          width = 640, height = 640,
+                          isColour = FALSE,
+                          scaler = 1.0,
+                          initialize = function() {
+                            require(ggplot2); # require(cowplot); require(grid);
+                            self$scaler <- 1.0;
+                            self$width <- round( self$widthMm * self$resolution * 0.0393701 );
+                            self$height <- round( self$heightMm * self$resolution * 0.0393701 );
+                          }
+                        )
 );
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+# L2017Graphme$sgData
+#
+L2017Graphme$set("public","setSize", function(widthMm,heightMm) {
+  self$widthMm <- widthMm;
+  self$heightMm <- heightMm;
+  return( self );
+});
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 # L2017Graphme$sgData
 #
 L2017Graphme$set("public","setResolution", function(resolution) {
   self$resolution <- resolution;
-  self$pt_per_px <- self$resolution / 72;
-  self$pt_per_px <- 1.0;
+  self$scaler <- 1.0;
   self$width <- round( self$widthMm * self$resolution * 0.0393701 );
   self$height <- round( self$heightMm * self$resolution * 0.0393701 );
+  return( self );
 });
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -78,6 +105,7 @@ L2017Graphme$set("public","setResolution", function(resolution) {
 #
 L2017Graphme$set("public","setIsColour", function(isColour) {
   self$isColour <- isColour;
+  return( self );
 });
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -90,6 +118,7 @@ L2017Graphme$set("public","writeGgplot2Png", function(graphNumber,filename,g) {
   plot( g );
   dev.off();
   plot( g ); # draw to screen as well
+  return( self );
 });
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -102,45 +131,14 @@ L2017Graphme$set("public","writeGgplot2Png", function(graphNumber,filename,g) {
 #
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
-#' Class defining a meaning-form frequency distribution.
-#'
-#' @docType class
-#' @importFrom R6 R6Class
-#' @export
-#' @return An object of class L2017Datame.
-#' @return Object of \code{\link{L2017Datame}} with methods for drawing graphs according suitable for final version of the paper.
-#' @format \code{\link{R6Class}} object.
-#' @field meanings Stores a list of distinct meanings.
-#' @field forms Stores a list of distinct forms.
-#' @field meanings2 Stores a list of meanings with repeats if more than one matching form.
-#' @field forms2 Stores a list of forms with repeats if more than one matching meaning.
-#' @field frequencies Stores the total frequency supplied for this meaning-form pair.
-#' @section Methods:
-#' \describe{
-#'   \item{Documentation}{Presents the meanings and uses of \code{Lexicon}'s methods.}
-#'   \item{\code{new()}}{Creates a new, empty lexicon object.}
-#'   \item{\code{addItemInstance(meaning,form,ct=1)}}{Adds a new \code{meaning}-\code{form} pair to the lexicon (if none already exists). It increments the count for that pair by \code{ct}.}
-#'   \item{\code{makeFormDistribution(meaning)}}{Returns the probability distribution over forms matching the argument \code{meaning}.}
-#'   \item{\code{selectForm(meaning)}}{Selects a single form according to the probability distribution matching the argument \code{meaning}.}
-#' }
-#' @examples
-#' L1 <- Lexicon$new();
-#' L1$addItemInstance("BAG","sac",5);
-#' L1$addItemInstance("FISH","peche",3);
-#' L1$addItemInstance("BAG","valise",11);
-#' print( L1aA$frequencies );
-#' print( L1$makeFormDistribution("BAG") );
-#' print( L1$selectByDistribution("BAG") );
 L2017Datame <- R6Class("L2017Datame",
                         public = list(
                           TA = NULL,
-                          PS = NULL,
                           MonolingualAv = NULL,
                           BilingualResponse = NULL,
                           initialize = function() {
                             require(tensorA);
                             self$TA <- TensorAgent$new();
-                            self$PS <- PopulationSimulation$new();
                           }
                         )
 );
@@ -266,6 +264,29 @@ L2017Datame$set("public","get_2", function() {
   a$pR <- a$p / b$p;
   a$ndp <- b$p;
   return( a );
+});
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+# L2017Datame$get_3b
+#
+L2017Datame$set("public","get_3a", function() {
+  df <- data.frame(Language=c("French","French","French",
+                              "English","English","English",
+                              "Hesitation","Hesitation","Hesitation"),
+                   Mode=c("Monolingual","Bilingual A","Bilingual B",
+                          "Monolingual","Bilingual A","Bilingual B",
+                          "Monolingual","Bilingual A","Bilingual B"),
+                   Syllables=c(245,211,173,
+                               5,   12, 25,
+                               36,  27, 23))
+  #
+  df$XOrd <- 11
+  df$XOrd[df$Mode=="Monolingual"] <- 1
+  df$XOrd[df$Mode=="Bilingual A"] <- 10
+  df$YOrd <- 11
+  df$YOrd[df$Language=="French"] <- 1
+  df$YOrd[df$Language=="English"] <- 10
+  return( df );
 });
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -491,35 +512,63 @@ L2017Datame$set("public","get_9", function(nT=25,lm=0.54,ml=1.0,A_d=100/101,A_n=
 #
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
-#' Class defining a meaning-form frequency distribution.
+#' L2017
+#'
+#' This class contains methods for creating the graphs in Ellison & Miceli (2017 - Language 93(2):255-287).
+#' These graphs are based on simulations from the classes \code{TensorAgent} and \code{PopulationSimulation}.
+#' There is a method corresponding to each graph, which creates the graph in PNG format and writes it to the
+#' current working directory.
+#'
+#' A further method uses the Student t test to evaluate the significance of the difference in distribution
+#' between the monolingual and bilingual results from the experiment.
 #'
 #' @docType class
 #' @importFrom R6 R6Class
 #' @export
 #' @return An object of class L2017.
-#' @return Object of \code{\link{L2017}} with methods for drawing graphs according suitable for final version of the paper.
+#' @return Object of \code{\link{L2017}} with methods for creating graphs for Ellison & Miceli (2017) published in Language 93(2):255-287.
 #' @format \code{\link{R6Class}} object.
-#' @field meanings Stores a list of distinct meanings.
-#' @field forms Stores a list of distinct forms.
-#' @field meanings2 Stores a list of meanings with repeats if more than one matching form.
-#' @field forms2 Stores a list of forms with repeats if more than one matching meaning.
-#' @field frequencies Stores the total frequency supplied for this meaning-form pair.
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{Presents the meanings and uses of \code{Lexicon}'s methods.}
-#'   \item{\code{new()}}{Creates a new, empty lexicon object.}
-#'   \item{\code{addItemInstance(meaning,form,ct=1)}}{Adds a new \code{meaning}-\code{form} pair to the lexicon (if none already exists). It increments the count for that pair by \code{ct}.}
-#'   \item{\code{makeFormDistribution(meaning)}}{Returns the probability distribution over forms matching the argument \code{meaning}.}
-#'   \item{\code{selectForm(meaning)}}{Selects a single form according to the probability distribution matching the argument \code{meaning}.}
+#'   \item{Documentation}{Presents the meanings and uses of \code{L2017}'s methods.}
+#'   \item{\code{$new()}}{Creates a new, empty lexicon object.}
+#'   \item{\code{$draw_1ab(graph_number,language,side)}}{Draws graphs 1a and 1b, depending on arguments (see example).}
+#'   \item{\code{$t_test()}}{Performs the Student t test comparing doppel rates between monolinguals and bilinguals in the experimental results.}
+#'   \item{\code{$draw_2()}}{Draws graph 2.}
+#'   \item{\code{$draw_3a()}}{Draws graph 3a.}
+#'   \item{\code{$draw_3b()}}{Draws graph 3b.}
+#'   \item{\code{$draw_4a()}}{Draws graph 4a.}
+#'   \item{\code{$draw_4b(graphnum="4b")}}{Draws graph 4b.}
+#'   \item{\code{$draw_4c()}}{Draws graph 4c.}
+#'   \item{\code{$draw_6()}}{Draws graph 6.}
+#'   \item{\code{$draw_7a()}}{Draws graph 7a.}
+#'   \item{\code{$draw_7b()}}{Draws graph 7b.}
+#'   \item{\code{$draw_8()}}{Draws graph 8.}
+#'   \item{\code{$draw_9()}}{Draws graph 9.}
+#'   \item{\code{$draw_10a(rx=0.2,ry=0.2,xc=0.5,yc=0.5,A=100,B=100,AB=100,linetypes=c("solid","dashed"),linecolours=c("red","green"),fillcolours=c("red","green"))}}{Draws graph 10a - graphs 10b, 10c build on this function, changing the default parameter values.}
+#'   \item{\code{$draw_10b()}}{Draws graph 10b.}
+#'   \item{\code{$draw_10c()}}{Draws graph 10c.}
+#'   \item{\code{$draw_all()}}{Draws graphs all graphs from the paper.}
 #' }
 #' @examples
-#' L1 <- Lexicon$new();
-#' L1$addItemInstance("BAG","sac",5);
-#' L1$addItemInstance("FISH","peche",3);
-#' L1$addItemInstance("BAG","valise",11);
-#' print( L1aA$frequencies );
-#' print( L1$makeFormDistribution("BAG") );
-#' print( L1$selectByDistribution("BAG") );
+#' library(bldR)
+#' self$t_test();
+#' self$draw_1ab("1a","SG","left");
+#' self$draw_1ab("1b","E","right");
+#' self$draw_2();
+#' self$draw_3a();
+#' self$draw_3b();
+#' self$draw_4a();
+#' self$draw_4b();
+#' self$draw_4c();
+#' self$draw_6();
+#' self$draw_7a();
+#' self$draw_7b();
+# self$draw_8(); # This can take a long time to run, uncomment when needed
+#' self$draw_9();
+#' self$draw_10a();
+#' self$draw_10b();
+#' self$draw_10c();
 L2017 <- R6Class("L2017",
                        public = list(
                          G = NULL,
@@ -573,7 +622,7 @@ L2017$set("public","wrapg", function(g,
                  legend.text.align = 0);
   g <- g + theme(legend.key.width=unit(2,"cm"),legend.key.height=unit(1.236,"cm"));
   if (linesize > 0.0) {
-    g <- g + geom_line(size=linesize*self$G$pt_per_px);
+    g <- g + geom_line(size=linesize*self$G$scaler);
   }
   if (!is.null(lpos)) {
     g <- g + theme(legend.position = lpos);
@@ -626,8 +675,7 @@ L2017$set("public","draw_2", function() {
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 # L2017$draw_3b4a
 #
-L2017$set("public","draw_3b4a",
-          draw_3b4a <- function(bardf,df,xlim,xlab,graphnum,filename) {
+L2017$set("public","draw_3b4a", function(bardf,df,xlim,xlab,graphnum,filename) {
   cols <- c(French="darkgrey",English="black");
   linetypes <- c(French="dashed",English="solid");
   g <- ggplot();
@@ -642,7 +690,7 @@ L2017$set("public","draw_3b4a",
   print(bardf);
   g <- g + geom_bar(data=bardf, aes(x=x, y=pct, fill=LanguageSource),colour="black",size=0.75,stat = "identity", width = 0.07);
   g <- g + scale_fill_manual(values = cols, guide = guide_legend(title = "Form Language"));
-  g <- g + geom_line(data=df,aes(x=x, y=qct,linetype=LanguageSource), size=2*self$G$pt_per_px);
+  g <- g + geom_line(data=df,aes(x=x, y=qct,linetype=LanguageSource), size=2*self$G$scaler);
   g <- g + scale_linetype_manual(values = linetypes, guide = guide_legend(title = "Form Language"));
   #
   g <- g + labs(title="Simulated Intrusion Rates",y="Expected Frequency",x=xlab);
@@ -660,6 +708,41 @@ L2017$set("public","draw_3b4a",
   self$G$writeGgplot2Png(graphnum,filename,g);
 });
 
+
+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+# L2017$draw_3a
+#
+L2017$set("public","draw_3a", function() {
+  df <- self$D$get_3a();
+  df <- b$D$get_3a();
+  df$x <- df$lm;
+  #
+  cols <- c(French="darkgrey",English="black",Hesitation="lightgrey");
+  g <- ggplot();
+  g <- g + theme_bw();
+  g <- g + coord_cartesian(ylim = c(100,300));
+  g <- g + scale_y_continuous(expand = c(0,0));
+  g <- g + geom_bar(data=df, aes(x=reorder(Mode,XOrd), y=Syllables, fill=reorder(Language,-YOrd)),colour="black",size=0.75,stat = "identity", width = 0.75);
+  g <- g + scale_fill_manual(values = cols, guide = guide_legend(title = "Form Language"));
+  #
+  g <- g + labs(title="Grosjean's 1997 Experiment",y="Syllable Count",x="Addressee");
+  g <- g + theme(legend.position=c(0.6,0.88))
+  g <- g + theme(axis.ticks.length=unit(1,"mm"),
+                 axis.ticks=element_line(size=1),
+                 axis.text=element_text(size=18),
+                 axis.title=element_text(size=20,face="bold")
+  );
+  g <- g + theme(legend.text=element_text(size=18),
+                 # legend.title=element_text(size=20,face="bold"));
+                 legend.title=element_blank());
+  tb_margin <- 18;
+  g <- g + theme(plot.title=element_text(size=24,face="bold",margin=margin(b=tb_margin,t=tb_margin,unit="pt")));
+  g <- g + theme(legend.key.width=unit(2,"cm"));
+  b$G$writeGgplot2Png("3a","Grosjean-experiment-LanguageMode.png",g);
+  #
+  self$G$writeGgplot2Png("3a","Grosjean-experiment-LanguageMode.png",g);
+  #
+});
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 # L2017$draw_3b
@@ -1018,6 +1101,7 @@ L2017$set("public","draw_all", function() {
   self$draw_1ab("1a","SG","left");
   self$draw_1ab("1b","E","right");
   self$draw_2();
+  self$draw_3a();
   self$draw_3b();
   self$draw_4a();
   self$draw_4b();

@@ -1,45 +1,46 @@
 require(R6);
 require(tensorA);
-# setwd("~/Google Drive/@@Projects/EstablishCID/Language-2015");
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 # TensorModel - an implementation of Ellison & Miceli (2017)
 #   model of multi-/bi-lingual lexical selection
+# Most uptodate versions available from http://bld.markellison.net/
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
-#' Class defining a meaning-form frequency distribution.
+#' TensorAgent: a model of bilingual lexical selection.
 #'
+#' This class implements the model of individual lexical selection described in Ellison & Miceli (2017 - Language 93(2):255-287) - hereafter EM. It is implemented using the TensorA, because that class facilitates linear calculations parameterised over a variable number of parameter dimensions.
 #' @docType class
 #' @importFrom R6 R6Class
 #' @export
-#' @return An object of class TensorModel.
-#' @return Object of class \code{\link{TensorModel}}.
+#' @return Object of class \code{\link{TensorAgent}}.
 #' @format \code{\link{R6Class}} object.
-#' @field \code{$LanguageMode}
-#' @field \code{$MonitoringLevel}
-#' @field \code{$Meanings}
-#' @field \code{$Languages}
-#' @field \code{$NumberOfLanguages}
-#' @field \code{$meLanguages}
-#' @field \code{$meLanguagePairs}
-#' @field \code{$LexicalTensor}
-#' @field \code{$version}
-#' @field \code{$delta_lt}
-#' @field \code{$p_l_t__b}
-#' @field \code{$p_f_sl}
-#' @field \code{$p_f_st__b}
-#' @field \code{$p_l_fst__bm}
-#' @field \code{$p_f_st__bm}
-#' @field \code{$p_l_t__b_version}
-#' @field \code{$p_f_sl_version}
-#' @field \code{$p_f_st__b_version}
-#' @field \code{$p_l_fst__bm_version}
-#' @field \code{$p_f_st__bm_version}
+#' @section Fields:
+#' \describe{
+#'   \item{Documentation}{Here are \code{TensorModel}'s fields. EM abbreviates Ellison & Miceli (2017).}
+#'   \item{\code{$LanguageMode}}{This is the language mode parameter on a scale $[0,1]$.}
+#'   \item{\code{$MonitoringLevel}}{The is the effort put into monitoring on a scale $[0,1]$.}
+#'   \item{\code{$Meanings}}{The meanings currently in the lexicon (a list of strings).}
+#'   \item{\code{$Languages}}{The languages modelled in the lexicon (a list of strings).}
+#'   \item{\code{$NumberOfLanguages}}{The number of languages modelled in the lexicon (integer).}
+#'   \item{\code{$LexicalTensor}}{The tensor with the frequency of occurrence for each language-meaning-form combination.}
+#'   \item{\code{$version}}{An integer tracking whether updates to values to avoid repeated calculation of the same values.}
+#'   \item{\code{$delta_lt}}{Kronecker delta (1 if $l=t$ zero otherwise), see Equation 2 in EM.}
+#'   \item{\code{$p_l_t__b}}{Probability of using language $l$ given a target language $t$ and language mode $b$.}
+#'   \item{\code{$p_f_sl}}{Probability of using form $f$ to represent meaning $s$ in language $l$, see Equation 3 in EM.}
+#'   \item{\code{$p_f_st__b}}{Probability of using form $f$ to representing meaning $s$ when trying to use language $t$ and the bilingual mode is $b$, see Equation 4 in EM.}
+#'   \item{\code{$p_l_fst__bm}}{Probability of identifying language $l$ as the source of form $f$ when trying to express meaning $s$ in language $t$, see Equation 8 in EM.}
+#'   \item{\code{$p_f_st__bm}}{Probability of using form $f$ to express meaning $s$ when aiming to speak language $t$, given bilingual mode $b$ and monitoring level $m$, see Equation 11 in EM.}
+#'   \item{\code{$p_l_t__b_version}}{The version number associated with the current value of \code{p_l_t__b}.}
+#'   \item{\code{$p_f_sl_version}}{The version number associated with the current value of \code{p_f_sl}.}
+#'   \item{\code{$p_f_st__b_version}}{The version number associated with the current value of \code{p_st__b}.}
+#'   \item{\code{$p_l_fst__bm_version}}{The version number associated with the current value of \code{p_l_fst__bm}.}
+#'   \item{\code{$p_f_st__bm_version}}{The version number associated with the current value of \code{p_f_st__bm}.}
+#' }
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{Here are \code{TensorModel}'s methods.}
 #'   \item{\code{$new()}}{Creates a new, empty \code{TensorModel} object.}
 #'   \item{\code{$clearLexicon()}}{Empties the lexical memory, removing all meaning-language-form triples.}
 #'   \item{\code{$setLanguageMode(languageMode)}}{Set the level of interaction between target and other languages.}
@@ -47,22 +48,27 @@ require(tensorA);
 #'   \item{\code{$addExample(meaning,language,form,ct=1)}}{Adds meaning-language-form triple to the model if it does not exist already. It then adds \code{ct} to the frequency recorded for this triple.}
 #'   \item{\code{$normalise(t,overIndices)}}{Normalise a tensor \code{t} over some vector of indices \code{overIndices}.}
 #'   \item{\code{$constructDataTensor()}}{Uses the tuples entered using \code{$addExample(..)} to build a tensor representing the distribution over experienced meaning-language-form combinations.}
-#'   \item{\code{make_p_()}}{Construct the Grosjean language activation distribution from the \code{languageMode} and \code{numberOfLanguages}.
-#'         NB: In future, this could extend to variation of language choice with semantics as well.}
-#'   \item{\code{$makeLfromG(R,G)}}{Given input relative frequencies \code{R} and Grosjean language activation distribution \code{G}, construct a tensor expressing the action of the language monitor.}
-#'   \item{\code{$makeL(R,languageMode,numberOfLanguages)}}{.}
-#'   \item{\code{apply(t,f)}}{Apply function \code{f} to each element of the tensor \code{t}.}
-#'   \item{\code{debugMe(name,t)}}{Print out a reasonable view of tensor \code{t} calling it \code{name}.}
-#'   \item{\code{makePosterior(R,languageMode)}}{.}
+#'   \item{\code{$makeMeLanguagePairs()}}{Constructs \code{}, a rank-2 tensor, both of whose indices range over languages, and whose values for each dimension combination is 1.0.}
+#'   \item{\code{$make_p_l_t__b()}}{Calculate the probability of a language given a target language.}
+#'   \item{\code{$make_p_f_sl()}}{Calculate the probability of using form $f$ to represent meaning $s$ in language $l$.}
+#'   \item{\code{$make_p_f_st__b()}}{Calculate the probability of using form $f$ to representing meaning $s$ when trying to use language $t$ and the bilingual mode is $b$.}
+#'   \item{\code{$make_p_l_fst__bm()}}{Calculate the probability of identifying language $l$ as the source of form $f$ when trying to express meaning $s$ in language $t$.}
+#'   \item{\code{$make_p_f_st__bm()}}{Calculate the probability of using form $f$ to express meaning $s$ when aiming to speak language $t$, given bilingual mode $b$ and monitoring level $m$.}
+#'   \item{\code{$as.data.frame()}}{Create a data frame with columns \code{Meaning}, \code{Language}, \code{Form} and probability of form \code{p}, giving the distribution \code{p_f_st__bm}.}
 #' }
 #' @examples
-#' L1 <- Lexicon$new();
-#' L1$addItemInstance("BAG","sac",5);
-#' L1$addItemInstance("FISH","peche",3);
-#' L1$addItemInstance("BAG","valise",11);
-#' print( L1aA$frequencies );
-#' print( L1$makeFormDistribution("BAG") );
-#' print( L1$selectByDistribution("BAG") );
+#' library(bldR)
+#' ta <- TensorAgent$new();
+#' ta$clearLexicon();
+#' ta$addExample("PHOTO","English","foto",    ct=0.5);
+#' ta$addExample("PHOTO","English","picture", ct=0.5);
+#' ta$addExample("PHOTO","Dutch",  "foto",    ct=1.0);
+#' ta$constructDataTensor();
+#' ta$setLanguageMode(0.4);
+#' ta$setMonitoringLevel(0.8);
+#' ta$make_p_f_st__bm();
+#' df <- ta$as.data.frame();
+#' print(df);
 #
 TensorAgent <- R6Class("TensorAgent",
                        public = list(
@@ -344,8 +350,8 @@ TensorAgent$set("public","make_p_f_st__bm", function() {
 });
 
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-# TensorAgent$make_p_f_st__bm
-#
+# TensorAgent$as.data.frame
+# Create a data frame with information
 TensorAgent$set("public","as.data.frame", function() {
   if (self$version != self$p_f_st__bm_version)
     self$make_p_f_st__bm();
