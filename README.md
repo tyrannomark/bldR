@@ -6,7 +6,7 @@ The software takes the form of an R package, called **bldR**.
 
 This software is companion to the following publication, hereafter called *EM*:
 
-* Ellison, TM and L Miceli (2017) **Language Discontinua: how Bilingual-Led Divergence Disrupts Cladistic Modelling**. [Language](https://muse.jhu.edu/journal/112) 93(2):255-287.
+* Ellison, TM and L Miceli (2017) **Language Discontinua: how Bilingual-Led Divergence Disrupts Cladistic Modelling**. [Language](https://muse.jhu.edu/journal/112) 93(2):255-287. (Once the embargo is lifted, this article will be made publicly available. Before then, copies can be requested from the authors.)
 
 The package contains all new data reported in *EM*, and all software used in the simulations, data-processing, statistical testing and graph-drawing.
 
