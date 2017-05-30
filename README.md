@@ -6,7 +6,7 @@ The software takes the form of an R package, called **bldR**.
 
 This software is companion to the following publication, hereafter called *EM*:
 
-* Ellison, TM and L Miceli (2017) **Language Discontinua: how Bilingual-Led Divergence Disrupts Cladistic Modelling**. [Language](https://muse.jhu.edu/journal/112) 93(2):255-287. (Once the embargo is lifted, this article will be made publicly available. Before then, copies can be requested from the authors.)
+* Ellison, TM and L Miceli (2017) **Language Monitoring in Bilinguals as a Mechanism for Rapid Lexical Divergence**. [Language](https://muse.jhu.edu/journal/112) 93(2):255-287. (Once the embargo is lifted, this article will be made publicly available. Before then, copies can be requested from the authors.)
 
 The package contains all new data reported in *EM*, and all software used in the simulations, data-processing, statistical testing and graph-drawing.
 
@@ -44,7 +44,7 @@ library(devtools)
 install_github("tyrannomark/bldR")
 ```
 
-## Code Example
+## Code Examples
 
 Here are some examples of code using the classes defined in the package. Other examples are given in the R package documentation.
 
@@ -98,12 +98,13 @@ The resulting graph is not very pretty, but you can see the fall-off among Engli
 
 ### Drawing the graphs from the paper
 
-The following code draws graph **4a** from *EM*. The functions for analysing data and constructing all the other graphs from the paper can also be called from the class ```L2017```.
+The following code draws graph **4a** from *EM*. The functions for analysing data and constructing all the other graphs from the paper can also be called from the class ```L2017```. It will also save a copy of the graph in your current working directory.
 
 ```
 require( bldR );
 l <- L2017$new();
-l$draw_4a();
+l$G$setIsColour(TRUE);
+l$draw_4b();
 ```
 
 ## Future Plans

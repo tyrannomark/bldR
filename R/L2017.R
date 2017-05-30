@@ -730,7 +730,7 @@ L2017$set("public","draw_4a", function() {
   print(bardf);
   #
   # self$
-  draw_3b4a(bardf,df,xlim=c(1.01,0.69),xlab="Monitoring Level",
+  self$draw_3b4a(bardf,df,xlim=c(1.01,0.69),xlab="Monitoring Level",
                  graphnum="4a",filename="Grosjean-experiment-sim-MonitoringLevel.png");
 });
 
