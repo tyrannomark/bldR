@@ -26,7 +26,9 @@ Also included in the package are three data-sets:
 
 You can easily install this package from github directly. Here are the steps (see [this page](http://kbroman.org/pkg_primer/pages/github.html) for more details):
 
-1. Install the [devtools](https://github.com/hadley/devtools) package, and the other libraries used by \code{bldR}. For example, start up R and run:
+1. You need a suitable development environment on your computer: enough so you can run the package [devtools](https://github.com/hadley/devtools). The readme for this package (just follow the link and scroll down) tells you how to setup this environment on various platforms (Linux, OSX, Windows). It's quite easy.
+
+2. Install the [devtools](https://github.com/hadley/devtools) package, and the other libraries used by \code{bldR}. For example, start up R and run:
 
 ```R
 install.packages("devtools")
