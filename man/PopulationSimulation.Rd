@@ -3,7 +3,7 @@
 \docType{class}
 \name{PopulationSimulation}
 \alias{PopulationSimulation}
-\title{PopulationSimulation}
+\title{PopulationSimulation: simulating populations of tensor agents.}
 \format{\code{\link{R6Class}} object.}
 \usage{
 PopulationSimulation
@@ -26,6 +26,41 @@ on the monolingual communities).
 \details{
 Graphs 10a,b,c in EM are based on simulations run using this class.
 }
+\section{Fields}{
+
+\describe{
+  \item{\code{LanguageMode}}{The parameter defining how likely agents are to generate potential (even if unrealised) intrusions from non-target langauges.
+  Parameter takes values $[0,1]$, 0 if no chance of intrusions, 1 if 50\% chance of intrusion.}
+  \item{\code{MonitoringLevel}}{The parameter defining how intensely agents monitor to avoid non-target language intrusions. Parameter takes values $[0,1]$, 0 if no monitoring takes place, 1 if all potential intrusions are blocked.}
+  \item{\code{Population_A}}{The number of agents in population speaking only language A.}
+  \item{\code{Population_B}}{The number of agents in population speaking only language B.}
+  \item{\code{Population_AB}}{The number of agents in population speaking both languages: A and B.}
+  \item{\code{Population}}{The total number of agents.}
+  \item{\code{SamplesPerAgent}}{The amount of data collected from each agent to serve as inputs to other agents' lexical memory.}
+  \item{\code{NumberOfGenerations}}{The number of generations. In this simulation process, one generation involves two steps: talking on inputs, and generating data according to the cognitive model which will be input for the next generation.}
+}
+}
+
+\section{Methods}{
+
+\describe{
+  \item{\code{new()}}{Creates a new, empty \code{PopulationSimulation} object.}
+  \item{\code{$setPopulationStructure(A=100,B=100,AB=0)}}{Sets the population levels for the 2 monolingual communities and the bilingual community.}
+  \item{\code{$setLanguageMode(languageMode)}}{Sets the language mode field.}
+  \item{\code{$setMonitoringLevel(monitoringLevel)}}{Sets the monitoring level field.}
+  \item{\code{$setSamplesPerAgent(samplesPerAgent)}}{Sets the samples-per-agent field.}
+  \item{\code{$setNumberOfGenerations(numberOfGenerations)}}{Sets the number of generations for the simulation.}
+  \item{\code{$clearLexicon()}}{Empty the lexicons of all agents.}
+  \item{\code{$constructDataTensor()}}{Initialises the tensor structures of each agent.}
+  \item{\code{$make_p_f_st__bm()}}{Builds the probabilistic mapping from meanings and target languages to forms in each agent. This is a complete run of the TensorAgent simulation for each agent, based on the input distribution of language-meaning-form combinations.}
+  \item{\code{$setLexicon(A_d=0.5,A_nA=0.5,A_nB=0.0,B_d=0.5,B_nA=0.0,B_nB=0.5)}}{Set the initial frequency associated with each form in each language. \code{A_d} is the doppel as it is in language A, \code{A_nA} is the non-doppel native to language A as it appears in A, \code{A_nB} is the non-doppel native to language B should it appear in A, \code{B_d} is the doppel in language B, \code{B_nA} is the non-doppel native to A if it appears in language B, \code{B_nB} is the non-doppel native to B as it appears in that language. Values for each of these can be any positive floating-point number.}
+  \item{\code{$productionDistribution()}}{Aggregates the distribution over forms in each language.}
+  \item{\code{$sampleFromDistribution(distribution,exact=FALSE)}}{Takes a sample from the given distribution. If \code{exact} is \code{TRUE} then the distribution extracted is exact distributional copy as opposed to a random sample.}
+  \item{\code{$setDistribution(samples)}}{Sets the distribution over lexical items in each agent (call \code{$clearLexicon()} first).}
+  \item{\code{$simulate(exact=FALSE)}}{Simulate for the specified number of generations, with the given parameter values, from a starting distribution of \code{A_d=0.55,A_nA=0.45,A_nB=0.0,B_d=0.5,B_nA=0.0,B_nB=0.5}.}
+}
+}
+
 \examples{
 library(bldR)
 ps <- PopulationSimulation$new();

@@ -1,3 +1,5 @@
+require(R6)
+
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
@@ -8,7 +10,7 @@
 #
 #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 #
-#' PopulationSimulation
+#' PopulationSimulation: simulating populations of tensor agents.
 #'
 #' This R6 class defines functions for running agent-based simulations described in Ellison & Miceli (2017 - Language 93(2):255-287) - hereafter EM.
 #' These simulations use the cognitive model
@@ -27,9 +29,7 @@
 #' @return An object of class PopulationSimulation.
 #' @return Object of \code{\link{PopulationSimulation}} with methods for drawing graphs according suitable for final version of the paper.
 #' @format \code{\link{R6Class}} object.
-#'
-#' @section Fields
-#'
+#' @section Fields:
 #' \describe{
 #'   \item{\code{LanguageMode}}{The parameter defining how likely agents are to generate potential (even if unrealised) intrusions from non-target langauges.
 #'   Parameter takes values $[0,1]$, 0 if no chance of intrusions, 1 if 50\% chance of intrusion.}
@@ -41,7 +41,6 @@
 #'   \item{\code{SamplesPerAgent}}{The amount of data collected from each agent to serve as inputs to other agents' lexical memory.}
 #'   \item{\code{NumberOfGenerations}}{The number of generations. In this simulation process, one generation involves two steps: talking on inputs, and generating data according to the cognitive model which will be input for the next generation.}
 #' }
-#'
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new()}}{Creates a new, empty \code{PopulationSimulation} object.}
@@ -59,7 +58,6 @@
 #'   \item{\code{$setDistribution(samples)}}{Sets the distribution over lexical items in each agent (call \code{$clearLexicon()} first).}
 #'   \item{\code{$simulate(exact=FALSE)}}{Simulate for the specified number of generations, with the given parameter values, from a starting distribution of \code{A_d=0.55,A_nA=0.45,A_nB=0.0,B_d=0.5,B_nA=0.0,B_nB=0.5}.}
 #' }
-#'
 #' @examples
 #' library(bldR)
 #' ps <- PopulationSimulation$new();
@@ -71,7 +69,6 @@
 #' ps$setLexicon();
 #' ps$simulate(exact=FALSE);
 #'
-require(R6)
 PopulationSimulation <- R6Class("PopulationSimulation",
                                 public = list(
                                   Agents = NULL,
