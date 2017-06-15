@@ -20,19 +20,19 @@ require(tensorA);
 #' @section Fields:
 #' \describe{
 #'   \item{Documentation}{Here are \code{TensorModel}'s fields. EM abbreviates Ellison & Miceli (2017).}
-#'   \item{\code{$LanguageMode}}{This is the language mode parameter on a scale $[0,1]$.}
-#'   \item{\code{$MonitoringLevel}}{The is the effort put into monitoring on a scale $[0,1]$.}
+#'   \item{\code{$LanguageMode}}{This is the language mode parameter on a scale \eqn{[0,1]}.}
+#'   \item{\code{$MonitoringLevel}}{The is the effort put into monitoring on a scale \eqn{[0,1]}.}
 #'   \item{\code{$Meanings}}{The meanings currently in the lexicon (a list of strings).}
 #'   \item{\code{$Languages}}{The languages modelled in the lexicon (a list of strings).}
 #'   \item{\code{$NumberOfLanguages}}{The number of languages modelled in the lexicon (integer).}
 #'   \item{\code{$LexicalTensor}}{The tensor with the frequency of occurrence for each language-meaning-form combination.}
 #'   \item{\code{$version}}{An integer tracking whether updates to values to avoid repeated calculation of the same values.}
-#'   \item{\code{$delta_lt}}{Kronecker delta (1 if $l=t$ zero otherwise), see Equation 2 in EM.}
-#'   \item{\code{$p_l_t__b}}{Probability of using language $l$ given a target language $t$ and language mode $b$.}
-#'   \item{\code{$p_f_sl}}{Probability of using form $f$ to represent meaning $s$ in language $l$, see Equation 3 in EM.}
-#'   \item{\code{$p_f_st__b}}{Probability of using form $f$ to representing meaning $s$ when trying to use language $t$ and the bilingual mode is $b$, see Equation 4 in EM.}
-#'   \item{\code{$p_l_fst__bm}}{Probability of identifying language $l$ as the source of form $f$ when trying to express meaning $s$ in language $t$, see Equation 8 in EM.}
-#'   \item{\code{$p_f_st__bm}}{Probability of using form $f$ to express meaning $s$ when aiming to speak language $t$, given bilingual mode $b$ and monitoring level $m$, see Equation 11 in EM.}
+#'   \item{\code{$delta_lt}}{Kronecker delta (1 if \eqn{l=t} zero otherwise), see Equation 2 in EM.}
+#'   \item{\code{$p_l_t__b}}{Probability of using language \eqn{l} given a target language \eqn{t} and language mode \eqn{b}.}
+#'   \item{\code{$p_f_sl}}{Probability of using form \eqn{f} to represent meaning \eqn{s} in language \eqn{l}, see Equation 3 in EM.}
+#'   \item{\code{$p_f_st__b}}{Probability of using form \eqn{f} to representing meaning \eqn{s} when trying to use language \eqn{t} and the bilingual mode is \eqn{b}, see Equation 4 in EM.}
+#'   \item{\code{$p_l_fst__bm}}{Probability of identifying language \eqn{l} as the source of form \eqn{f} when trying to express meaning \eqn{s} in language \eqn{t}, see Equation 8 in EM.}
+#'   \item{\code{$p_f_st__bm}}{Probability of using form \eqn{f} to express meaning \eqn{s} when aiming to speak language \eqn{t}, given bilingual mode \eqn{b} and monitoring level \eqn{m}, see Equation 11 in EM.}
 #'   \item{\code{$p_l_t__b_version}}{The version number associated with the current value of \code{p_l_t__b}.}
 #'   \item{\code{$p_f_sl_version}}{The version number associated with the current value of \code{p_f_sl}.}
 #'   \item{\code{$p_f_st__b_version}}{The version number associated with the current value of \code{p_st__b}.}
@@ -48,12 +48,12 @@ require(tensorA);
 #'   \item{\code{$addExample(meaning,language,form,ct=1)}}{Adds meaning-language-form triple to the model if it does not exist already. It then adds \code{ct} to the frequency recorded for this triple.}
 #'   \item{\code{$normalise(t,overIndices)}}{Normalise a tensor \code{t} over some vector of indices \code{overIndices}.}
 #'   \item{\code{$constructDataTensor()}}{Uses the tuples entered using \code{$addExample(..)} to build a tensor representing the distribution over experienced meaning-language-form combinations.}
-#'   \item{\code{$makeMeLanguagePairs()}}{Constructs \code{}, a rank-2 tensor, both of whose indices range over languages, and whose values for each dimension combination is 1.0.}
+#'   \item{\code{$makeMeLanguagePairs()}}{Constructs a rank-2 tensor, both of whose indices range over languages, and whose values for each dimension combination is 1.0.}
 #'   \item{\code{$make_p_l_t__b()}}{Calculate the probability of a language given a target language.}
-#'   \item{\code{$make_p_f_sl()}}{Calculate the probability of using form $f$ to represent meaning $s$ in language $l$.}
-#'   \item{\code{$make_p_f_st__b()}}{Calculate the probability of using form $f$ to representing meaning $s$ when trying to use language $t$ and the bilingual mode is $b$.}
-#'   \item{\code{$make_p_l_fst__bm()}}{Calculate the probability of identifying language $l$ as the source of form $f$ when trying to express meaning $s$ in language $t$.}
-#'   \item{\code{$make_p_f_st__bm()}}{Calculate the probability of using form $f$ to express meaning $s$ when aiming to speak language $t$, given bilingual mode $b$ and monitoring level $m$.}
+#'   \item{\code{$make_p_f_sl()}}{Calculate the probability of using form \eqn{f} to represent meaning \eqn{s} in language \eqn{l}.}
+#'   \item{\code{$make_p_f_st__b()}}{Calculate the probability of using form \eqn{f} to representing meaning \eqn{s} when trying to use language \eqn{t} and the bilingual mode is \eqn{b}.}
+#'   \item{\code{$make_p_l_fst__bm()}}{Calculate the probability of identifying language \eqn{l} as the source of form \eqn{f} when trying to express meaning \eqn{s} in language \eqn{t}.}
+#'   \item{\code{$make_p_f_st__bm()}}{Calculate the probability of using form \eqn{f} to express meaning \eqn{s} when aiming to speak language \eqn{t}, given bilingual mode \eqn{b} and monitoring level \eqn{m}.}
 #'   \item{\code{$as.data.frame()}}{Create a data frame with columns \code{Meaning}, \code{Language}, \code{Form} and probability of form \code{p}, giving the distribution \code{p_f_st__bm}.}
 #' }
 #' @examples

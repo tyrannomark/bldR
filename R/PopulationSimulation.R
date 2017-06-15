@@ -32,8 +32,8 @@ require(R6)
 #' @section Fields:
 #' \describe{
 #'   \item{\code{LanguageMode}}{The parameter defining how likely agents are to generate potential (even if unrealised) intrusions from non-target langauges.
-#'   Parameter takes values $[0,1]$, 0 if no chance of intrusions, 1 if 50\% chance of intrusion.}
-#'   \item{\code{MonitoringLevel}}{The parameter defining how intensely agents monitor to avoid non-target language intrusions. Parameter takes values $[0,1]$, 0 if no monitoring takes place, 1 if all potential intrusions are blocked.}
+#'   Parameter takes values \eqn{[0,1]}, 0 if no chance of intrusions, 1 if 50\% chance of intrusion.}
+#'   \item{\code{MonitoringLevel}}{The parameter defining how intensely agents monitor to avoid non-target language intrusions. Parameter takes values \eqn{[0,1]}, 0 if no monitoring takes place, 1 if all potential intrusions are blocked.}
 #'   \item{\code{Population_A}}{The number of agents in population speaking only language A.}
 #'   \item{\code{Population_B}}{The number of agents in population speaking only language B.}
 #'   \item{\code{Population_AB}}{The number of agents in population speaking both languages: A and B.}

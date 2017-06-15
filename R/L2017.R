@@ -498,7 +498,9 @@ L2017Datame$set("public","get_9", function(nT=25,lm=0.54,ml=1.0,A_d=100/101,A_n=
 #'   \item{\code{$draw_7b()}}{Draws graph 7b.}
 #'   \item{\code{$draw_8()}}{Draws graph 8.}
 #'   \item{\code{$draw_9()}}{Draws graph 9.}
-#'   \item{\code{$draw_10a(rx=0.2,ry=0.2,xc=0.5,yc=0.5,A=100,B=100,AB=100,linetypes=c("solid","dashed"),linecolours=c("red","green"),fillcolours=c("red","green"))}}{Draws graph 10a - graphs 10b, 10c build on this function, changing the default parameter values.}
+#'   \item{\code{$draw_10a(rx=0.2,ry=0.2,xc=0.5,yc=0.5,A=100,B=100,AB=100,}
+#'         \code{linetypes=c("solid","dashed"),} \code{linecolours=c("red","green"),}
+#'         \code{fillcolours=c("red","green"))}}{Draws graph 10a - graphs 10b, 10c build on this function, changing the default parameter values.}
 #'   \item{\code{$draw_10b()}}{Draws graph 10b.}
 #'   \item{\code{$draw_10c()}}{Draws graph 10c.}
 #'   \item{\code{$draw_all()}}{Draws graphs all graphs from the paper.}
